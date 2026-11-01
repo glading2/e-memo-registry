@@ -18,7 +18,7 @@ export default function RegisterForm() {
     );
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: `${window.location.origin}/e-memo-registry/auth/callback` },
+      options: { redirectTo: `${window.location.origin}/e-memo-registry/auth/callback?next=/register` },
     });
 
     if (error) {
