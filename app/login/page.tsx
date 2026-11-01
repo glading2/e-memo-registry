@@ -16,7 +16,7 @@ export default function Login() {
         }}
       >
         <Image
-          src="/images/login-flower-books.png"
+          src="/e-memo-registry/images/login-flower-books.png"
           alt=""
           width={520}
           height={600}

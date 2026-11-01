@@ -19,7 +19,7 @@ export default function MemoForm({ groups }: { groups: Group[] }) {
     setBusy(true);
     setError('');
     try {
-      const response = await fetch('/api/memos', {
+      const response = await fetch('/e-memo-registry/api/memos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Idempotency-Key': crypto.randomUUID() },
         body: JSON.stringify({ department_id: group, subject, recipient, remark: note }),

@@ -11,7 +11,7 @@ export default function SettingsForm() {
 
   async function submit(event: React.FormEvent) {
     event.preventDefault();
-    const response = await fetch('/api/settings', {
+    const response = await fetch('/e-memo-registry/api/settings', {
       method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code, name }),
     });
     const result = await response.json();

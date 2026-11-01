@@ -24,7 +24,7 @@ export default async function Layout({
                 <Link href="/reports">รายงาน</Link>
                 <Link href="/settings">ตั้งค่า</Link>
                 <form
-                  action="/auth/signout"
+                  action="/e-memo-registry/auth/signout"
                   method="post"
                   style={{ display: "inline" }}
                 >

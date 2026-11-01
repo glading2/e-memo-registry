@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createBrowserClient } from '@supabase/ssr';
 
-const basePath = '';
+const basePath = '/e-memo-registry';
 
 export default function MemoActions({ memoId, status }: { memoId: string; status: string }) {
   const [reason, setReason] = useState('');
