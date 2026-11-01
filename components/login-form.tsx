@@ -1,35 +1,42 @@
 "use client";
 
-import Link from 'next/link';
-import { useState } from 'react';
-import { createBrowserClient } from '@supabase/ssr';
-import { useRouter } from 'next/navigation';
+import { useState } from "react";
+import { createBrowserClient } from "@supabase/ssr";
 
 export default function LoginForm() {
-  const [identity, setIdentity] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const router = useRouter();
+  const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
 
-  async function submit(event: React.FormEvent) {
-    event.preventDefault();
-    const email = identity.trim().toLowerCase();
-    if (!email.includes('@')) {
-      setError('กรุณากรอกอีเมลที่ใช้สมัครสมาชิก');
-      return;
+  async function continueWithGoogle() {
+    setBusy(true);
+    setError("");
+    const supabase = createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    );
+    const { error: oauthError } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/e-memo-registry/auth/callback`,
+      },
+    });
+    if (oauthError) {
+      setBusy(false);
+      setError(oauthError.message);
     }
-    const supabase = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) setError(error.message);
-    else { router.push('/dashboard'); router.refresh(); }
   }
 
-  return <form className="login-form" onSubmit={submit}>
-    <label>อีเมล<input suppressHydrationWarning required type="email" autoComplete="email" value={identity} onChange={event => setIdentity(event.target.value)} placeholder="name@example.com" /></label>
-    <label>รหัสผ่าน<input suppressHydrationWarning required type="password" autoComplete="current-password" value={password} onChange={event => setPassword(event.target.value)} placeholder="รหัสผ่าน" /></label>
-    <div className="login-options"><label><input suppressHydrationWarning type="checkbox" /> จดจำการเข้าสู่ระบบ</label><a href="#">ลืมรหัสผ่าน?</a></div>
-    <p className="error">{error}</p><button suppressHydrationWarning className="login-submit">→ &nbsp; เข้าสู่ระบบ</button>
-    <div className="login-divider"><span>หรือ</span></div>
-    <Link className="register-link" href="/register">♙ &nbsp; สมัครสมาชิก</Link>
-  </form>;
+  return <div className="login-form">
+    <p>เข้าสู่ระบบด้วยบัญชี Google ที่ลงทะเบียนไว้</p>
+    <button
+      type="button"
+      className="login-submit"
+      disabled={busy}
+      onClick={continueWithGoogle}
+      style={{ background: "#fff", border: "1px solid #b9c8de", color: "#1d3152", boxShadow: "none" }}
+    >
+      {busy ? "กำลังเชื่อมต่อ Google..." : "G  เข้าสู่ระบบด้วย Google"}
+    </button>
+    <p className="error">{error}</p>
+  </div>;
 }
