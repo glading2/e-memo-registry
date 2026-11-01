@@ -38,6 +38,9 @@ export default function LoginForm() {
         <span className="google-mark" aria-hidden="true">G</span>
         {busy ? "กำลังเชื่อมต่อ Google..." : "ดำเนินการต่อด้วย Google"}
       </button>
+      <p className="register-prompt">
+        ยังไม่มีบัญชี? <a href="/e-memo-registry/register">ลงทะเบียนด้วย Google</a>
+      </p>
       <p className="error" role="alert">{error}</p>
     </div>
   );
